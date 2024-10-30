@@ -1,6 +1,10 @@
 package riccardogulin.u5d8.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import riccardogulin.u5d8.entities.User;
 import riccardogulin.u5d8.exceptions.BadRequestException;
@@ -8,7 +12,6 @@ import riccardogulin.u5d8.exceptions.NotFoundException;
 import riccardogulin.u5d8.payloads.UsersPayload;
 import riccardogulin.u5d8.repositories.UsersRepository;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,8 +37,11 @@ public class UsersService {
 		return this.usersRepository.save(newUser);
 	}
 
-	public List<User> findAll() {
-		return this.usersRepository.findAll();
+	public Page<User> findAll(int page, int size, String sortBy) {
+		if (size > 100) size = 100; // Limitiamo la size max a 100 così da client non possono inserire numeri troppo grandi
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		// Pageable ci consente di configurare come devono essere paginati i risultati passando numero di pagina, numero elementi pagina e criterio di ordinamento
+		return this.usersRepository.findAll(pageable);
 	}
 
 	public User findById(UUID userId) {
