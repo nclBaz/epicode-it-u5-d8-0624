@@ -40,17 +40,20 @@ public class UsersController {
 		return this.usersService.save(body);
 	}
 
+
 	// 3. GET http://localhost:3001/users/{userId}
 	@GetMapping("/{userId}")
 	public User findById(@PathVariable UUID userId) {
 		return this.usersService.findById(userId);
 	}
 
+
 	// 4. PUT http://localhost:3001/users/{userId} (+ req.body)
 	@PutMapping("/{userId}")
 	public User findByIdAndUpdate(@PathVariable UUID userId, @RequestBody UsersPayload body) {
 		return this.usersService.findByIdAndUpdate(userId, body);
 	}
+
 
 	// 5. DELETE http://localhost:3001/users/{userId} --> 204
 	@DeleteMapping("/{userId}")
